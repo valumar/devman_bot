@@ -18,7 +18,6 @@ class Bot():
         if not api_key:
             raise(ValueError("Токен не указан"))
         self.api_key = api_key
-        # self.user_id = user_id
         self.bot = telegram.Bot(token=api_key)
         self.logger = logging.getLogger('tbot')
         self.updater = Updater(self.api_key)
