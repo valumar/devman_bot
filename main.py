@@ -1,6 +1,7 @@
 import os
 import requests
 import ptbot
+import telegram
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -34,10 +35,12 @@ def check_long_polling(timestamp=None):
     
 
 if __name__ == "__main__":
-    
-    bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
-    bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
-    
+    try:
+        bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
+        bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
+    except telegram.TelegramError as e:
+        print(e)
+
     timestamp = None
     while True:
         try:
