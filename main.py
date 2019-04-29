@@ -1,4 +1,5 @@
 import os
+import logging
 import requests
 import ptbot
 import telegram
@@ -38,8 +39,9 @@ if __name__ == "__main__":
     try:
         bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
         bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
-    except telegram.TelegramError as e:
-        print(e)
+    except telegram.error.NetworkError:
+        logging.exception('TelegramError')
+        exit(1)
 
     timestamp = None
     while True:
@@ -64,6 +66,5 @@ if __name__ == "__main__":
                     message
                 )
           
-        except Exception as e:
-            print(e)
-            pass
+        except telegram.error.NetworkError:
+            logging.exception('TelegramError')

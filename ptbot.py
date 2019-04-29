@@ -5,7 +5,11 @@ from telegram.ext import Filters
 from telegram.ext import MessageHandler
 from telegram.ext import Updater
 
-logging.basicConfig()
+logging.basicConfig(
+    format='%(levelname)-8s [%(asctime)s] %(message)s',
+    level=logging.DEBUG,
+    filename='log.log'
+)
 
 
 class Bot():
