@@ -12,16 +12,6 @@ HEADERS = {
 }
 
 
-def check_user_reviews():
-    api_command = "user_reviews"
-    response = requests.get(
-        BASE_API_URL + api_command,
-        headers=HEADERS
-    )
-    if response.ok:
-        return response.json()
-
-
 def check_long_polling(timestamp=None):
     api_command = "long_polling"
     payload = {'timestamp': timestamp}  
