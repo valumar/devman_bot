@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 import requests
 import ptbot
@@ -13,6 +14,7 @@ HEADERS = {
 
 
 def check_long_polling(timestamp=None):
+    logging.debug('Start long polling...')
     api_command = "long_polling"
     payload = {'timestamp': timestamp}  
     try:
@@ -30,15 +32,17 @@ def check_long_polling(timestamp=None):
 
 
 if __name__ == "__main__":
-    try:
-        bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
-        bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
-    except telegram.error.NetworkError:
-        logging.exception('TelegramError')
-        exit(1)
-
-    timestamp = None
     while True:
+        while True:
+            try:
+                bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
+                bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
+                break
+            except telegram.error.NetworkError:
+                logging.exception('TelegramError')
+            time.sleep(60)
+
+        timestamp = None
         try:
             response = check_long_polling(timestamp)
             json_data = response.json()
