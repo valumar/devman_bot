@@ -20,7 +20,6 @@ def check_long_polling(timestamp=None):
             BASE_API_URL + api_command,
             headers=HEADERS,
             params=payload,
-            timeout=5
         )
         response.raise_for_status()
         if response.ok:
