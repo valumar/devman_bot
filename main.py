@@ -42,15 +42,16 @@ if __name__ == "__main__":
     while True:
         try:
             response = check_long_polling(timestamp)
-            if response.json()['status'] == 'timeout':
-                timestamp = response.json()['timestamp_to_request']
+            json_data = response.json()
+            if json_data['status'] == 'timeout':
+                timestamp = json_data['timestamp_to_request']
                 response = check_long_polling(timestamp)
-            elif response.json()['status'] == 'found':
-                logging.debug(response.json()['new_attempts'][0]['lesson_title'])
+            elif json_data['status'] == 'found':
+                logging.debug(json_data['new_attempts'][0]['lesson_title'])
                 logging.debug(response.url, "\n")
-                                
-                lesson_title = response.json()['new_attempts'][0]['lesson_title']
-                score = response.json()['new_attempts'][0]['is_negative']
+
+                lesson_title = json_data['new_attempts'][0]['lesson_title']
+                score = json_data['new_attempts'][0]['is_negative']
                 score_message = "Преподавателю всё понравилось, можно приступать к следующему уроку!"
                 if not score:
                     score_message = "К сожалению в работе нашлись ошибки"
