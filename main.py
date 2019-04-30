@@ -15,14 +15,20 @@ HEADERS = {
 def check_long_polling(timestamp=None):
     api_command = "long_polling"
     payload = {'timestamp': timestamp}  
-    response = requests.get(
-        BASE_API_URL + api_command,
-        headers=HEADERS,
-        params=payload,
-    )
-    if response.ok:
-        return response
-    
+    try:
+        response = requests.get(
+            BASE_API_URL + api_command,
+            headers=HEADERS,
+            params=payload,
+            timeout=5
+        )
+        response.raise_for_status()
+        if response.ok:
+            return response
+    except requests.RequestException:
+        logging.exception('RequestException')
+        return None
+
 
 if __name__ == "__main__":
     try:
@@ -57,3 +63,6 @@ if __name__ == "__main__":
           
         except telegram.error.NetworkError:
             logging.exception('TelegramError')
+        except AttributeError:
+            logging.exception('BadResponse')
+
