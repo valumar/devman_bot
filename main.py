@@ -41,14 +41,13 @@ if __name__ == "__main__":
     timestamp = None
     while True:
         try:
-            response = check_long_polling()
+            response = check_long_polling(timestamp)
             if response.json()['status'] == 'timeout':
                 timestamp = response.json()['timestamp_to_request']
                 response = check_long_polling(timestamp)
             elif response.json()['status'] == 'found':
-                print(response.json())
-                print(response.json()['new_attempts'][0]['lesson_title'])
-                print(response.url, "\n")
+                logging.debug(response.json()['new_attempts'][0]['lesson_title'])
+                logging.debug(response.url, "\n")
                                 
                 lesson_title = response.json()['new_attempts'][0]['lesson_title']
                 score = response.json()['new_attempts'][0]['is_negative']
@@ -57,10 +56,10 @@ if __name__ == "__main__":
                     score_message = "К сожалению в работе нашлись ошибки"
                 message = f"У вас проверили работу \"{lesson_title}\"\n\n{score_message}"
                 bot.send_message(
-                    os.getenv("TELEGRAM_CHAT_ID"), 
+                    os.getenv("TELEGRAM_CHAT_ID"),
                     message
                 )
-          
+
         except telegram.error.NetworkError:
             logging.exception('TelegramError')
         except AttributeError:
