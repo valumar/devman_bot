@@ -5,12 +5,6 @@ import requests
 import ptbot
 import telegram
 from dotenv import load_dotenv
-load_dotenv()
-
-BASE_API_URL = "https://dvmn.org/api/"
-HEADERS = {
-    "Authorization": "Token {}".format(os.getenv("DEVMAN_TOKEN")),
-}
 
 
 def check_long_polling(timestamp=None):
@@ -32,6 +26,12 @@ def check_long_polling(timestamp=None):
 
 
 if __name__ == "__main__":
+    load_dotenv()
+
+    BASE_API_URL = "https://dvmn.org/api/"
+    HEADERS = {
+        "Authorization": "Token {}".format(os.getenv("DEVMAN_TOKEN")),
+    }
     while True:
         while True:
             try:
