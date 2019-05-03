@@ -11,18 +11,14 @@ def check_long_polling(timestamp=None):
     logging.debug('Start long polling...')
     api_command = "long_polling"
     payload = {'timestamp': timestamp}  
-    try:
-        response = requests.get(
-            BASE_API_URL + api_command,
-            headers=HEADERS,
-            params=payload,
-        )
-        response.raise_for_status()
-        if response.ok:
-            return response
-    except requests.RequestException:
-        logging.exception('RequestException')
-        return None
+    response = requests.get(
+        BASE_API_URL + api_command,
+        headers=HEADERS,
+        params=payload,
+    )
+    response.raise_for_status()
+    if response.ok:
+        return response.json()
 
 
 if __name__ == "__main__":
@@ -44,14 +40,11 @@ if __name__ == "__main__":
 
         timestamp = None
         try:
-            response = check_long_polling(timestamp)
-            json_data = response.json()
+            json_data = check_long_polling(timestamp)
             if json_data['status'] == 'timeout':
                 timestamp = json_data['timestamp_to_request']
             elif json_data['status'] == 'found':
                 logging.debug(json_data['new_attempts'][0]['lesson_title'])
-                logging.debug(response.url, "\n")
-
                 lesson_title = json_data['new_attempts'][0]['lesson_title']
                 score = json_data['new_attempts'][0]['is_negative']
                 score_message = "Преподавателю всё понравилось, можно приступать к следующему уроку!"
@@ -65,6 +58,6 @@ if __name__ == "__main__":
 
         except telegram.error.NetworkError:
             logging.exception('TelegramError')
-        except AttributeError:
-            logging.exception('BadResponse')
+        except requests.RequestException:
+            logging.exception('RequestException')
 
