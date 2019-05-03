@@ -48,7 +48,6 @@ if __name__ == "__main__":
             json_data = response.json()
             if json_data['status'] == 'timeout':
                 timestamp = json_data['timestamp_to_request']
-                response = check_long_polling(timestamp)
             elif json_data['status'] == 'found':
                 logging.debug(json_data['new_attempts'][0]['lesson_title'])
                 logging.debug(response.url, "\n")
