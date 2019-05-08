@@ -27,8 +27,7 @@ def check_long_polling(timestamp=None):
         return response.json()
 
 
-if __name__ == "__main__":
-
+def main():
     while True:
         while True:
             try:
@@ -62,3 +61,6 @@ if __name__ == "__main__":
         except requests.RequestException:
             logging.exception('RequestException')
 
+
+if __name__ == "__main__":
+    main()
