@@ -42,9 +42,10 @@ def main():
             if json_data['status'] == 'timeout':
                 timestamp = json_data['timestamp_to_request']
             elif json_data['status'] == 'found':
-                logging.debug(json_data['new_attempts'][0]['lesson_title'])
-                lesson_title = json_data['new_attempts'][0]['lesson_title']
-                score = json_data['new_attempts'][0]['is_negative']
+                last_lesson = json_data['new_attempts'][0]
+                lesson_title = last_lesson['lesson_title']
+                logging.debug(lesson_title)
+                score = last_lesson['is_negative']
                 score_message = "Преподавателю всё понравилось, можно приступать к следующему уроку!"
                 if not score:
                     score_message = "К сожалению в работе нашлись ошибки"
