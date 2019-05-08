@@ -30,7 +30,7 @@ def main():
         while True:
             try:
                 bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
-                bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
+                logging.debug("Бот запущен...")
                 break
             except telegram.error.NetworkError:
                 logging.exception('TelegramError')
