@@ -17,8 +17,7 @@ def check_long_polling(base_api_url, headers, timestamp=None):
         params=payload,
     )
     response.raise_for_status()
-    if response.ok:
-        return response.json()
+    return response.json()
 
 
 def main():
