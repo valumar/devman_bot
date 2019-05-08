@@ -5,21 +5,15 @@ import requests
 import ptbot
 import telegram
 from dotenv import load_dotenv
-load_dotenv()
-
-BASE_API_URL = "https://dvmn.org/api/"
-HEADERS = {
-    "Authorization": "Token {}".format(os.getenv("DEVMAN_TOKEN")),
-}
 
 
-def check_long_polling(timestamp=None):
+def check_long_polling(base_api_url, headers, timestamp=None):
     logging.debug('Start long polling...')
     api_command = "long_polling"
     payload = {'timestamp': timestamp}  
     response = requests.get(
-        BASE_API_URL + api_command,
-        headers=HEADERS,
+        base_api_url + api_command,
+        headers=headers,
         params=payload,
     )
     response.raise_for_status()
@@ -28,6 +22,11 @@ def check_long_polling(timestamp=None):
 
 
 def main():
+    load_dotenv()
+    base_api_url = "https://dvmn.org/api/"
+    headers = {
+        "Authorization": "Token {}".format(os.getenv("DEVMAN_TOKEN")),
+    }
     while True:
         while True:
             try:
@@ -40,7 +39,7 @@ def main():
 
         timestamp = None
         try:
-            json_data = check_long_polling(timestamp)
+            json_data = check_long_polling(base_api_url, headers, timestamp)
             if json_data['status'] == 'timeout':
                 timestamp = json_data['timestamp_to_request']
             elif json_data['status'] == 'found':
