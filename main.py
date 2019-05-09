@@ -55,7 +55,7 @@ def main():
                 logging.debug(last_lesson)
                 score = last_lesson['is_negative']
                 score_message = "Преподавателю всё понравилось, можно приступать к следующему уроку!"
-                if not score:
+                if score:
                     score_message = "К сожалению в работе нашлись ошибки"
                 message = f"У вас проверили работу \"{lesson_title}\"\n\n{score_message}"
                 bot.send_message(
