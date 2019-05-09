@@ -1,27 +1,21 @@
 import os
 import time
-import logging
 import requests
 import ptbot
 import telegram
 from dotenv import load_dotenv
-
-
-logging.basicConfig(
-    format='%(levelname)-8s [%(asctime)s] %(message)s',
-    level=logging.DEBUG,
-    # filename='log.log'
-)
+from setup_logging import logger as logging
 
 
 def check_long_polling(base_api_url, headers, timestamp=None):
-    logging.debug('Start long polling...')
+    logging.info('Start long polling...')
     api_command = "long_polling"
     payload = {'timestamp': timestamp}  
     response = requests.get(
         base_api_url + api_command,
         headers=headers,
         params=payload,
+        timeout=91
     )
     response.raise_for_status()
     return response.json()
@@ -37,7 +31,7 @@ def main():
         while True:
             try:
                 bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
-                logging.debug("Бот запущен...")
+                logging.info("Бот запущен...")
                 bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
                 break
             except telegram.error.NetworkError:
@@ -64,15 +58,21 @@ def main():
                     message
                 )
 
+        except requests.exceptions.ReadTimeout:
+            logging.exception('ReadTimeout')
         except telegram.error.NetworkError:
             logging.exception('TelegramError')
         except requests.RequestException as requests_error:
             logging.exception('RequestException')
-            bot.send_message(
-                os.getenv("TELEGRAM_CHAT_ID"),
-                f"Ошибка запроса к API DevMan...\n{requests_error}"
-            )
-
+            try:
+                bot.send_message(
+                    os.getenv("TELEGRAM_CHAT_ID"),
+                    f"Ошибка запроса к API DevMan...\n{requests_error}"
+                )
+            except Exception:
+                logging.exception('UnknownException')
+        except Exception:
+            logging.exception('UnknownException')
 
 if __name__ == "__main__":
     main()
