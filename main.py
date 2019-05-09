@@ -52,6 +52,7 @@ def main():
                 last_lesson = json_data['new_attempts'][0]
                 lesson_title = last_lesson['lesson_title']
                 logging.debug(lesson_title)
+                logging.debug(last_lesson)
                 score = last_lesson['is_negative']
                 score_message = "Преподавателю всё понравилось, можно приступать к следующему уроку!"
                 if not score:
