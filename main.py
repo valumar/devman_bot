@@ -7,6 +7,13 @@ import telegram
 from dotenv import load_dotenv
 
 
+logging.basicConfig(
+    format='%(levelname)-8s [%(asctime)s] %(message)s',
+    level=logging.DEBUG,
+    # filename='log.log'
+)
+
+
 def check_long_polling(base_api_url, headers, timestamp=None):
     logging.debug('Start long polling...')
     api_command = "long_polling"
