@@ -38,6 +38,7 @@ def main():
             try:
                 bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
                 logging.debug("Бот запущен...")
+                bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
                 break
             except telegram.error.NetworkError:
                 logging.exception('TelegramError')
@@ -65,8 +66,12 @@ def main():
 
         except telegram.error.NetworkError:
             logging.exception('TelegramError')
-        except requests.RequestException:
+        except requests.RequestException as requests_error:
             logging.exception('RequestException')
+            bot.send_message(
+                os.getenv("TELEGRAM_CHAT_ID"),
+                f"Ошибка запроса к API DevMan...\n{requests_error}"
+            )
 
 
 if __name__ == "__main__":
