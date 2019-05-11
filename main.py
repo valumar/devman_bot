@@ -1,10 +1,11 @@
 import os
 import time
+import logging
 import requests
 import ptbot
 import telegram
 from dotenv import load_dotenv
-from setup_logging import logger as logging
+import setup_logging
 
 
 def check_long_polling(base_api_url, headers, timestamp=None):
@@ -32,7 +33,6 @@ def main():
             try:
                 bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
                 logging.info("Бот запущен...")
-                bot.send_message(os.getenv("TELEGRAM_CHAT_ID"), "Бот запущен...")
                 break
             except telegram.error.NetworkError:
                 logging.exception('TelegramError')
@@ -64,15 +64,9 @@ def main():
             logging.exception('TelegramError')
         except requests.RequestException as requests_error:
             logging.exception('RequestException')
-            try:
-                bot.send_message(
-                    os.getenv("TELEGRAM_CHAT_ID"),
-                    f"Ошибка запроса к API DevMan...\n{requests_error}"
-                )
-            except Exception:
-                logging.exception('UnknownException')
         except Exception:
             logging.exception('UnknownException')
+
 
 if __name__ == "__main__":
     main()
