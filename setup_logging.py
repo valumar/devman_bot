@@ -58,6 +58,6 @@ logger.addHandler(c_handler)
 logger.addHandler(f_handler)
 
 bot_handler = TelegramBotHandler()
-bot_handler.setLevel(logging.INFO)
+bot_handler.setLevel(logging.WARNING)
 # bot_handler.setFormatter(log_format)
 logger.addHandler(bot_handler)
