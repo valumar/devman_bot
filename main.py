@@ -7,11 +7,13 @@ import telegram
 from dotenv import load_dotenv
 import setup_logging
 
+logger = logging.getLogger(__name__)
+
 
 def check_long_polling(base_api_url, headers, timestamp=None):
-    logging.info('Start long polling...')
+    logger.info('Start long polling...')
     api_command = "long_polling"
-    payload = {'timestamp': timestamp}  
+    payload = {'timestamp': timestamp}
     response = requests.get(
         base_api_url + api_command,
         headers=headers,
@@ -31,11 +33,11 @@ def main():
     while True:
         while True:
             try:
-                bot = ptbot.Bot(os.getenv("TELEGRAM_TOKEN"))
-                logging.info("Бот запущен...")
+                bot = telegram.Bot(os.getenv("TELEGRAM_TOKEN"))
+                logger.info("Бот запущен...")
                 break
             except telegram.error.NetworkError:
-                logging.exception('TelegramError')
+                logger.exception('TelegramError')
             time.sleep(60)
 
         timestamp = None
@@ -46,8 +48,8 @@ def main():
             elif json_data['status'] == 'found':
                 last_lesson = json_data['new_attempts'][0]
                 lesson_title = last_lesson['lesson_title']
-                logging.debug(lesson_title)
-                logging.debug(last_lesson)
+                logger.debug(lesson_title)
+                logger.debug(last_lesson)
                 score = last_lesson['is_negative']
                 score_message = "Преподавателю всё понравилось, можно приступать к следующему уроку!"
                 if score:
@@ -59,13 +61,13 @@ def main():
                 )
 
         except requests.exceptions.ReadTimeout:
-            logging.exception('ReadTimeout')
+            logger.exception('ReadTimeout')
         except telegram.error.NetworkError:
-            logging.exception('TelegramError')
+            logger.exception('TelegramError')
         except requests.RequestException as requests_error:
-            logging.exception('RequestException')
+            logger.exception('RequestException')
         except Exception:
-            logging.exception('UnknownException')
+            logger.exception('UnknownException')
 
 
 if __name__ == "__main__":
