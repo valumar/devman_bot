@@ -25,7 +25,6 @@ def check_long_polling(base_api_url, headers, timestamp=None):
 
 
 def main():
-    load_dotenv()
     base_api_url = "https://dvmn.org/api/"
     headers = {
         "Authorization": "Token {}".format(os.getenv("DEVMAN_TOKEN")),
@@ -71,4 +70,6 @@ def main():
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    setup_logging.config_logging(os.getenv("TELEGRAM_TOKEN"), os.getenv("TELEGRAM_CHAT_ID"))
     main()
