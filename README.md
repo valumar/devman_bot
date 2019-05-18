@@ -6,7 +6,7 @@ Telegram Bot for checking lesson reviews on [DevMan](https://dvmn.org/)
 
 For proper use you have to get DevMan account and get [DevMan API Token](https://dvmn.org/api/docs/).
 Also you need to register Telegram Bot via [@BotFather](https://telegram.me/botfather) and receive TELEGRAM_TOKEN and TELEGRAM_CHAT_ID (use [@userinfobot](https://telegram.me/userinfobot) for that)
-After that rename the file `.env-example` to `.env` and paste your info.
+After that copy the file `.env-example` to `.env` and paste your info.
 
 Python3 should be already installed. 
 It is strictly recommended that you use [virtual environment](https://docs.python.org/3/library/venv.html) for project isolation. 
